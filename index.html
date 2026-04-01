@@ -51,6 +51,37 @@
     @keyframes drawLine { from{stroke-dashoffset:2000} to{stroke-dashoffset:0} }
     @keyframes fadeInShape { from{opacity:0;transform:scale(0.7) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
     @keyframes fadeInContent { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    /* ── 히어로 입장 모션 ── */
+    @keyframes nucleusPulse {
+      0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
+      20%{opacity:1;}
+      65%{transform:translate(-50%,-50%) scale(2.2);opacity:0.75;}
+      100%{transform:translate(-50%,-50%) scale(4);opacity:0;}
+    }
+    @keyframes flyFromCenter {
+      0%{transform:translate(var(--fly-x),var(--fly-y)) scale(0.06) rotate(-70deg);opacity:0;}
+      40%{opacity:1;}
+      74%{transform:translate(calc(var(--fly-x)*-0.06),calc(var(--fly-y)*-0.06)) scale(1.08) rotate(6deg);opacity:1;}
+      100%{transform:translate(0px,0px) scale(1) rotate(0deg);opacity:1;}
+    }
+    @keyframes burstOut {
+      0%{transform:translate(-50%,-50%) scale(0) rotate(0deg);opacity:1;}
+      55%{transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1) rotate(210deg);opacity:0.7;}
+      100%{transform:translate(calc(-50% + var(--bx)*1.6),calc(-50% + var(--by)*1.6)) scale(0.15) rotate(380deg);opacity:0;}
+    }
+    .hero-nucleus{
+      position:absolute;left:50%;top:50%;z-index:6;
+      width:110px;height:110px;border-radius:50%;
+      background:radial-gradient(circle,rgba(105,26,250,0.9) 0%,rgba(198,141,255,0.55) 50%,transparent 75%);
+      box-shadow:0 0 60px rgba(105,26,250,0.6),0 0 120px rgba(105,26,250,0.3);
+      transform:translate(-50%,-50%) scale(0);pointer-events:none;opacity:0;
+    }
+    .hero-nucleus.active{animation:nucleusPulse 2.2s ease forwards;}
+    .geo-flying{animation:flyFromCenter 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards!important;}
+    .geo-s1.geo-floating{animation:floatA 7s ease-in-out infinite!important;opacity:1!important;}
+    .geo-s2.geo-floating{animation:floatB 8s ease-in-out infinite!important;opacity:1!important;}
+    .geo-s3.geo-floating{animation:floatC 9s ease-in-out infinite!important;opacity:1!important;}
+    .geo-s4.geo-floating{animation:floatA 6s ease-in-out infinite!important;opacity:1!important;}
     .blueprint-svg line { stroke-dasharray:2000; stroke-dashoffset:2000; }
     .blueprint-svg line.h1 { animation:drawLine 1.2s ease forwards 0.2s; }
     .blueprint-svg line.h2 { animation:drawLine 1.0s ease forwards 0.5s; }
@@ -60,11 +91,8 @@
     .blueprint-svg line.v3 { animation:drawLine 0.8s ease forwards 0.9s; }
     .blueprint-svg circle.c1 { stroke-dasharray:400; stroke-dashoffset:400; animation:drawLine 1s ease forwards 1.0s; }
     .blueprint-svg circle.c2 { stroke-dasharray:280; stroke-dashoffset:280; animation:drawLine 0.9s ease forwards 1.2s; }
-    .hero-shapes .geo-s1 { animation:fadeInShape 0.7s ease forwards 1.3s; opacity:0; }
-    .hero-shapes .geo-s2 { animation:fadeInShape 0.7s ease forwards 1.5s; opacity:0; }
-    .hero-shapes .geo-s3 { animation:fadeInShape 0.7s ease forwards 1.7s; opacity:0; }
-    .hero-shapes .geo-s4 { animation:fadeInShape 0.7s ease forwards 1.9s; opacity:0; }
-    .hero-inner { animation:fadeInContent 0.8s ease forwards 1.6s; opacity:0; }
+    .hero-shapes .geo-s1,.hero-shapes .geo-s2,.hero-shapes .geo-s3,.hero-shapes .geo-s4 { opacity:0; }
+    .hero-inner { animation:fadeInContent 0.9s ease forwards 3.8s; opacity:0; }
 
     /* ── HERO ── */
     .hero {
@@ -260,10 +288,10 @@
     /* Custom card */
     .prog-card.custom { background:linear-gradient(135deg,#1a0040,#3d00a0); border:none; }
     .prog-card.custom::after { display:none; }
-    .prog-card.custom .prog-body { padding:36px 28px; }
-    .prog-card.custom .prog-tag { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.2); }
-    .prog-card.custom h3 { color:#fff; font-size:18px; }
-    .prog-card.custom .psub { color:rgba(255,255,255,0.6); }
+    .prog-card.custom .prog-body { padding:48px 40px; }
+    .prog-card.custom .prog-tag { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.2); font-size:13px; padding:6px 16px; }
+    .prog-card.custom h3 { color:#fff; font-size:28px; line-height:1.2; margin-bottom:14px; }
+    .prog-card.custom .psub { color:rgba(255,255,255,0.7); font-size:15px; line-height:1.65; }
     .step-list { display:flex; flex-direction:column; gap:10px; margin:16px 0; }
     .step { display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(255,255,255,0.85); }
     .snum { min-width:24px; height:24px; background:rgba(255,255,255,0.15); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:var(--sub); }
@@ -401,7 +429,8 @@
     }
     .btn-submit:hover { background:var(--accent); transform:translateY(-2px); box-shadow:0 8px 28px rgba(105,26,250,0.35); }
     /* Prog modal */
-    .pm-img { height:170px; border-radius:14px; margin-bottom:18px; }
+    .pm-img { position:relative; width:100%; padding-bottom:56.25%; height:0; border-radius:14px; margin-bottom:18px; overflow:hidden; }
+    .pm-img .img-ph { position:absolute; inset:0; height:100%; border-radius:0; }
     .pm-tag { font-size:11px; font-weight:800; color:var(--main); background:rgba(105,26,250,0.08); padding:4px 11px; border-radius:8px; display:inline-block; margin-bottom:11px; }
     .pm-details { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:18px; }
     .pm-detail { background:var(--bg); border-radius:11px; padding:11px 14px; }
@@ -488,25 +517,28 @@
     <video src="hero-video.mp4" autoplay muted loop playsinline></video>
   </div>
   <div class="hero-overlay"></div>
+  <!-- 입장 모션: 핵 + 파티클 -->
+  <div class="hero-nucleus" id="heroNucleus"></div>
+  <div id="heroParticles" style="position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden;"></div>
   <!-- Geometric shapes -->
   <div class="hero-shapes">
     <!-- 벤다이어그램 좌상단 -->
-    <svg class="geo geo-s1" style="top:10%;left:4%;animation:floatA 7s ease-in-out infinite 2.2s;" width="200" height="120" viewBox="0 0 200 120">
+    <svg class="geo geo-s1" style="top:10%;left:4%;" width="200" height="120" viewBox="0 0 200 120">
       <circle cx="72" cy="60" r="54" fill="#691afa" opacity="0.13"/>
       <circle cx="128" cy="60" r="54" fill="#c68dff" opacity="0.13"/>
       <circle cx="72" cy="60" r="54" fill="none" stroke="#691afa" stroke-width="1.2" opacity="0.35"/>
       <circle cx="128" cy="60" r="54" fill="none" stroke="#c68dff" stroke-width="1.2" opacity="0.35"/>
     </svg>
     <!-- 헥사곤 우상단 -->
-    <svg class="geo geo-s2" style="top:10%;right:5%;animation:floatB 8s ease-in-out infinite 2.4s;" width="100" height="116" viewBox="0 0 100 116">
+    <svg class="geo geo-s2" style="top:10%;right:5%;" width="100" height="116" viewBox="0 0 100 116">
       <polygon points="50,3 97,27 97,89 50,113 3,89 3,27" fill="#ff6b9d" opacity="0.1" stroke="#ff6b9d" stroke-width="1.5"/>
     </svg>
     <!-- 삼각형 좌하단 -->
-    <svg class="geo geo-s3" style="bottom:14%;left:6%;animation:floatC 9s ease-in-out infinite 2.6s;" width="88" height="76" viewBox="0 0 88 76">
+    <svg class="geo geo-s3" style="bottom:14%;left:6%;" width="88" height="76" viewBox="0 0 88 76">
       <polygon points="44,4 84,72 4,72" fill="#00d4aa" opacity="0.1" stroke="#00d4aa" stroke-width="1.5"/>
     </svg>
     <!-- 벤다이어그램 우하단 -->
-    <svg class="geo geo-s4" style="bottom:16%;right:4%;animation:floatA 6s ease-in-out infinite 2.8s;" width="130" height="78" viewBox="0 0 130 78">
+    <svg class="geo geo-s4" style="bottom:16%;right:4%;" width="130" height="78" viewBox="0 0 130 78">
       <circle cx="47" cy="39" r="35" fill="#ffd93d" opacity="0.09"/>
       <circle cx="83" cy="39" r="35" fill="#6a00ff" opacity="0.09"/>
       <circle cx="47" cy="39" r="35" fill="none" stroke="#ffd93d" stroke-width="1" opacity="0.22"/>
@@ -514,7 +546,7 @@
     </svg>
   </div>
   <div class="hero-inner">
-    <div class="hero-badge">🏫 학교 · 공공기관 프로그램 전문</div>
+    <div class="hero-badge">🏫 학교·공공기관 경험 콘텐츠 기획사</div>
     <h1>경험하는 교육을 설계하여<br /><span class="hl">나다움</span>을 찾다</h1>
     <p class="hero-desc">
       듣고 쓰는 수업이 아닌,<br />
@@ -547,9 +579,9 @@
     <!-- Carousel -->
     <div class="carousel" id="carousel">
       <div class="c-track" id="cTrack">
-        <div class="c-slide img-ph"><span class="phi">📸</span><span>활동 현장 이미지 1</span></div>
-        <div class="c-slide img-ph"><span class="phi">📸</span><span>활동 현장 이미지 2</span></div>
-        <div class="c-slide img-ph"><span class="phi">📸</span><span>활동 현장 이미지 3</span></div>
+        <div class="c-slide"><img src="assets/images/activity/활동현장 이미지/현장 이미지.1.jpg" alt="활동현장 1" style="width:100%;height:100%;object-fit:cover;" /></div>
+        <div class="c-slide"><img src="assets/images/activity/활동현장 이미지/현장 이미지.2.jpg" alt="활동현장 2" style="width:100%;height:100%;object-fit:cover;" /></div>
+        <div class="c-slide"><img src="assets/images/activity/활동현장 이미지/현장 이미지.3.jpg" alt="활동현장 3" style="width:100%;height:100%;object-fit:cover;" /></div>
       </div>
       <div class="c-dots" id="cDots"></div>
     </div>
@@ -660,13 +692,21 @@
             <span class="etag">예시</span>
           </div>
         </div>
-        <a href="#" class="result-cta" onclick="openResultModal();return false;">🎵 결과물 예시 확인하기 →</a>
       </div>
       <div class="result-visual">
-        <div class="img-ph result-img"><span class="phi">🖼️</span><span>결과물 이미지 (추후 추가)</span></div>
+        <!-- 썸네일 이미지 -->
+        <img src="assets/images/reperance/음악이미지.png" alt="우리의 지금 앨범 커버" style="width:100%;height:100%;object-fit:cover;display:block;" />
         <div class="result-overlay">
           <p>실제 제작 결과물 예시</p>
-          <h3>대상이 직접 만든 결과물</h3>
+          <h3>우리의 지금</h3>
+          <!-- 재생 버튼 -->
+          <div style="margin-bottom:14px;">
+            <audio id="resultAudio" src="assets/music/우리의 지금.mp3"></audio>
+            <button onclick="toggleAudio()" id="playBtn"
+              style="display:inline-flex;align-items:center;gap:8px;background:var(--main);color:#fff;border:none;padding:10px 22px;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 4px 16px rgba(105,26,250,0.4);">
+              ▶ 재생하기
+            </button>
+          </div>
           <div class="plat-badges">
             <span class="pbadge">🎧 Spotify</span>
             <span class="pbadge">▶ YouTube Music</span>
@@ -697,17 +737,17 @@
     <div class="prog-section active" id="tab-school">
       <div class="prog-grid">
         <div class="prog-card" onclick="openProgModal('enterai')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/프로그램 이미지/AI entertainment quest.png" alt="AI Entertainment Quest" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">문화형 × 참여형</div>
-            <h3>EnterAIment Quest</h3>
+            <h3>AI Entertainment Quest</h3>
             <p class="psub">AI 엔터테인먼트 × 팀빌딩</p>
             <div class="prog-meta"><span>초·중·고</span><span>최대 100명</span><span>비용 문의</span></div>
             <p class="prog-more">자세히 보기 →</p>
           </div>
         </div>
         <div class="prog-card" onclick="openProgModal('relation')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/프로그램 이미지/관계형성 학교폭력에방팀빌딩.jpeg" alt="관계형성 팀빌딩" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">화합형 × 참여형</div>
             <h3>관계형성 · 학교폭력예방 팀빌딩</h3>
@@ -717,7 +757,7 @@
           </div>
         </div>
         <div class="prog-card" onclick="openProgModal('career')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/프로그램 이미지/진로강연 프로그램.jpeg" alt="진로 레크리에이션 강연" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">참여형 × 문화형</div>
             <h3>진로 레크리에이션 강연</h3>
@@ -727,7 +767,7 @@
           </div>
         </div>
         <div class="prog-card" onclick="openProgModal('reclec')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/프로그램 이미지/청소년 리더십.jpeg" alt="관계 교육 레크리에이션" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">화합형 × 참여형</div>
             <h3>관계 교육 레크리에이션</h3>
@@ -743,7 +783,7 @@
     <div class="prog-section" id="tab-public">
       <div class="prog-grid">
         <div class="prog-card" onclick="openProgModal('ailife')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/프로그램 이미지/나 를닮은 음악[ai음악 회고].png" alt="AI로 나의 삶 회고하기" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">문화형 × 참여형</div>
             <h3>AI로 나의 삶 회고하기</h3>
@@ -753,7 +793,7 @@
           </div>
         </div>
         <div class="prog-card" onclick="openProgModal('orgrec')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/프로그램 이미지/Gemini_Generated_Image_7bc3k97bc3k97bc3.png" alt="조직 관계형성 레크리에이션" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">화합형 × 참여형</div>
             <h3>조직 관계형성 레크리에이션</h3>
@@ -763,7 +803,7 @@
           </div>
         </div>
         <div class="prog-card" onclick="openProgModal('aibio')">
-          <div class="img-ph prog-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+          <div class="prog-img" style="overflow:hidden;"><img src="assets/images/programs/Gemini_Generated_Image_nzjrrxnzjrrxnzjr.png" alt="AI 자서전 만들기" style="width:100%;height:100%;object-fit:cover;" /></div>
           <div class="prog-body">
             <div class="prog-tag">문화형 × 창작형</div>
             <h3>AI를 활용하여 자서전 만들기</h3>
@@ -777,7 +817,7 @@
 
     <!-- 커스텀 -->
     <div class="prog-section" id="tab-custom">
-      <div style="max-width:420px;">
+      <div style="max-width:720px;">
         <div class="prog-card custom" onclick="openInquiry()">
           <div class="prog-body">
             <div class="prog-tag">커스텀</div>
@@ -884,12 +924,12 @@
         <div class="clabel">이메일</div>
         <div class="cval">idengroup@naver.com</div>
       </a>
-      <a href="#" target="_blank" class="contact-card">
+      <div class="contact-card" style="cursor:default;opacity:0.6;">
         <div class="icon">💬</div>
         <div class="clabel">카카오톡 채널</div>
-        <div class="cval">IDenTeach 채널</div>
-      </a>
-      <a href="#" target="_blank" class="contact-card">
+        <div class="cval">준비중 🔜</div>
+      </div>
+      <a href="https://blog.naver.com/identeach" target="_blank" class="contact-card">
         <div class="icon">📝</div>
         <div class="clabel">네이버 블로그</div>
         <div class="cval">IDenTeach 블로그</div>
@@ -921,36 +961,33 @@
   <div class="modal">
     <button class="modal-close" onclick="closeModal('inquiryModal')">✕</button>
     <h2>교육 문의하기</h2>
-    <p class="modal-sub">아래 내용을 작성해 주시면 빠르게 연락드리겠습니다.<br />대표 진성재 · 010-4084-8962</p>
+    <p class="modal-sub">아래 내용을 작성해 주시면 빠르게 연락드리겠습니다.<br />대표 진성재 · 010-4084-8962<br /><span style="color:var(--main);font-weight:700;">※ 미정인 항목은 "미정"으로 적어주세요</span></p>
     <form onsubmit="submitInquiry(event)">
+      <div class="fg"><label>① 학교 / 기관명 *</label><input name="school" placeholder="예) ○○중학교, ○○복지관" required /></div>
+      <div class="fg"><label>② 담당자 성함 *</label><input name="name" placeholder="홍길동" required /></div>
       <div class="fg-row">
-        <div class="fg"><label>학교 / 기관명 *</label><input name="school" placeholder="예) ○○중학교" required /></div>
-        <div class="fg"><label>담당자 이름 *</label><input name="name" placeholder="홍길동" required /></div>
+        <div class="fg"><label>③ 연락처 *</label><input type="tel" name="phone" placeholder="010-0000-0000" required /></div>
+        <div class="fg"><label>④ 이메일</label><input type="email" name="email" placeholder="example@email.com" /></div>
       </div>
       <div class="fg-row">
-        <div class="fg"><label>연락처 *</label><input type="tel" name="phone" placeholder="010-0000-0000" required /></div>
-        <div class="fg"><label>대상 인원</label><input name="students" placeholder="예) 100명" /></div>
+        <div class="fg"><label>⑤ 대상</label><input name="target" placeholder="예) 중학교 2학년, 성인 등 (미정)" /></div>
+        <div class="fg"><label>⑥ 인원</label><input name="students" placeholder="예) 100명 (미정)" /></div>
       </div>
-      <div class="fg"><label>희망 프로그램</label>
+      <div class="fg"><label>⑦ 희망 프로그램</label>
         <select name="program">
-          <option value="">선택해 주세요</option>
+          <option value="">선택해 주세요 (미정이면 미정으로 선택)</option>
           <optgroup label="학교 프로그램">
-            <option>EnterAIment Quest</option>
+            <option>AI Entertainment Quest</option>
             <option>관계형성 · 학교폭력예방 팀빌딩</option>
             <option>진로 레크리에이션 강연</option>
             <option>관계 교육 레크리에이션</option>
           </optgroup>
-          <optgroup label="공공기관 프로그램">
-            <option>AI로 나의 삶 회고하기</option>
-            <option>조직 관계형성 레크리에이션</option>
-            <option>AI를 활용하여 자서전 만들기</option>
-          </optgroup>
           <option>커스텀 프로그램 (맞춤 기획)</option>
-          <option>아직 미정 / 상담 원함</option>
+          <option>미정 / 상담 원함</option>
         </select>
       </div>
-      <div class="fg"><label>프로그램 목적</label><input name="purpose" placeholder="예) 신학기 팀빌딩, 학교폭력예방 행사 등" /></div>
-      <div class="fg"><label>고민이나 요청 사항</label><textarea name="message" placeholder="기관 상황이나 원하시는 내용을 자유롭게 적어주세요."></textarea></div>
+      <div class="fg"><label>⑧ 프로그램 목적</label><input name="purpose" placeholder="예) 신학기 팀빌딩, 학교폭력예방 행사, 진로 교육 등 (미정)" /></div>
+      <div class="fg"><label>⑨ 요청사항</label><textarea name="message" placeholder="기관 상황이나 원하시는 내용을 자유롭게 적어주세요. (미정인 항목은 미정으로 작성해 주세요)"></textarea></div>
       <button type="submit" class="btn-submit">문의 이메일 보내기 →</button>
     </form>
   </div>
@@ -962,14 +999,23 @@
     <button class="modal-close" onclick="closeModal('resultModal')">✕</button>
     <h2>🎵 결과물 예시</h2>
     <p class="modal-sub">IDenTeach 프로그램을 통해 직접 만든 결과물 예시입니다.</p>
-    <div class="img-ph" style="height:160px;border-radius:14px;margin-bottom:18px;"><span class="phi">🎵</span><span>AI 음원 앨범 커버 (추후 추가)</span></div>
+    <!-- 앨범 커버 이미지 -->
+    <img src="assets/images/reperance/음악이미지.png" alt="AI 음원 앨범 커버"
+      style="width:100%;border-radius:14px;margin-bottom:14px;aspect-ratio:1/1;object-fit:cover;" />
+    <!-- 오디오 플레이어 -->
+    <div style="background:var(--bg);border-radius:14px;padding:16px;margin-bottom:16px;">
+      <p style="font-size:12px;color:var(--gray);font-weight:700;margin-bottom:4px;">🎧 직접 들어보세요</p>
+      <p style="font-size:14px;font-weight:800;margin-bottom:8px;">우리의 지금</p>
+      <audio controls style="width:100%;border-radius:8px;">
+        <source src="assets/music/우리의 지금.mp3" type="audio/mpeg">
+        브라우저가 오디오를 지원하지 않습니다.
+      </audio>
+    </div>
     <div style="background:var(--bg);border-radius:14px;padding:16px;margin-bottom:18px;">
       <p style="font-size:12px;color:var(--gray);font-weight:700;margin-bottom:5px;">SPOTIFY · YOUTUBE MUSIC · APPLE MUSIC</p>
       <p style="font-size:15px;font-weight:800;margin-bottom:3px;">○○중학교 2학년 합동 앨범</p>
       <p style="font-size:13px;color:var(--gray);">10개 팀 × 각 1트랙 = 학년 전체 앨범 등록</p>
     </div>
-    <p style="font-size:14px;color:var(--gray);line-height:1.7;margin-bottom:22px;">실제 Spotify 링크 준비 중입니다.<br />문의 시 현재까지 제작된 샘플을 직접 들려드립니다.</p>
-    <button class="btn-submit" onclick="closeModal('resultModal');openInquiry()">결과물 샘플 받아보기 →</button>
   </div>
 </div>
 
@@ -984,15 +1030,10 @@
       <select id="propProg">
         <option value="">선택해 주세요</option>
         <optgroup label="학교 프로그램">
-          <option>EnterAIment Quest</option>
+          <option>AI Entertainment Quest</option>
           <option>관계형성 · 학교폭력예방 팀빌딩</option>
           <option>진로 레크리에이션 강연</option>
           <option>관계 교육 레크리에이션</option>
-        </optgroup>
-        <optgroup label="공공기관 프로그램">
-          <option>AI로 나의 삶 회고하기</option>
-          <option>조직 관계형성 레크리에이션</option>
-          <option>AI를 활용하여 자서전 만들기</option>
         </optgroup>
         <option>커스텀 프로그램</option>
       </select>
@@ -1010,15 +1051,16 @@
 <!-- ══ PROGRAM MODALS ══ -->
 <div class="modal-overlay" id="progModal-enterai"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-enterai')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/프로그램 이미지/AI entertainment quest.png" alt="AI Entertainment Quest" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">문화형 × 참여형 · 학교</div>
-  <h2>EnterAIment Quest</h2>
+  <h2>AI Entertainment Quest</h2>
   <p class="modal-sub">찾아가는 AI 리터러시 × 팀빌딩 — 게임이 곧 음악이 되는 수업</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">초·중·고등학교</div></div>
     <div class="pm-detail"><div class="dl">인원</div><div class="dv">최대 100명 (10명×10조)</div></div>
     <div class="pm-detail"><div class="dl">시간</div><div class="dv">2교시 (약 100분)</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">AI 리터러시 교육 · 팀빌딩 · 창의적 결과물 제작 경험</div></div>
   </div>
   <ul class="pm-features">
     <li>팀빌딩 게임 결과가 AI 프롬프트로 연결</li>
@@ -1032,13 +1074,14 @@
 
 <div class="modal-overlay" id="progModal-relation"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-relation')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/프로그램 이미지/관계형성 학교폭력에방팀빌딩.jpeg" alt="관계형성 팀빌딩" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">화합형 × 참여형 · 학교</div>
   <h2>관계형성 · 학교폭력예방 팀빌딩</h2>
   <p class="modal-sub">함께 만드는 관계, 서로를 이해하는 경험</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">초·중·고등학교</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">학교폭력예방 · 관계 형성 · 심리적 안전감 구축</div></div>
   </div>
   <ul class="pm-features">
     <li>경쟁이 아닌 협력 중심의 팀빌딩 구성</li>
@@ -1052,13 +1095,14 @@
 
 <div class="modal-overlay" id="progModal-career"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-career')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/프로그램 이미지/진로강연 프로그램.jpeg" alt="진로 레크리에이션 강연" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">참여형 × 문화형 · 학교</div>
   <h2>진로 레크리에이션 강연</h2>
   <p class="modal-sub">나를 알아가는 진로 탐색 경험</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">초·중·고등학교</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">진로 탐색 · 자기 이해 · 적성 발견</div></div>
   </div>
   <ul class="pm-features">
     <li>레크리에이션으로 자연스럽게 적성 발견</li>
@@ -1072,13 +1116,14 @@
 
 <div class="modal-overlay" id="progModal-reclec"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-reclec')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/프로그램 이미지/청소년 리더십.jpeg" alt="관계 교육 레크리에이션" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">화합형 × 참여형 · 학교</div>
   <h2>관계 교육 레크리에이션</h2>
   <p class="modal-sub">함께하는 즐거움으로 관계를 배우는 시간</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">초·중·고등학교</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">관계 형성 · 공동체 의식 · 전체 참여형 즐거운 활동</div></div>
   </div>
   <ul class="pm-features">
     <li>레크리에이션을 통한 자연스러운 관계 형성</li>
@@ -1092,13 +1137,14 @@
 
 <div class="modal-overlay" id="progModal-ailife"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-ailife')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/프로그램 이미지/나 를닮은 음악[ai음악 회고].png" alt="AI로 나의 삶 회고하기" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">문화형 × 참여형 · 공공기관</div>
   <h2>AI로 나의 삶 회고하기</h2>
   <p class="modal-sub">AI와 함께 나의 이야기를 돌아보는 경험</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">성인 / 공공기관</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">자기 탐구 · 삶의 회고 · 정체성 발견</div></div>
   </div>
   <ul class="pm-features">
     <li>AI 도구를 활용한 삶의 회고 작업</li>
@@ -1112,13 +1158,14 @@
 
 <div class="modal-overlay" id="progModal-orgrec"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-orgrec')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/프로그램 이미지/Gemini_Generated_Image_7bc3k97bc3k97bc3.png" alt="조직 관계형성 레크리에이션" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">화합형 × 참여형 · 공공기관</div>
   <h2>조직 관계형성 레크리에이션</h2>
   <p class="modal-sub">구성원이 함께 즐기며 관계를 만들어가는 프로그램</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">성인 / 공공기관</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">조직 내 관계 형성 · 심리적 안전감 · 팀빌딩</div></div>
   </div>
   <ul class="pm-features">
     <li>조직 내 심리적 안전감 형성</li>
@@ -1132,13 +1179,14 @@
 
 <div class="modal-overlay" id="progModal-aibio"><div class="modal">
   <button class="modal-close" onclick="closeModal('progModal-aibio')">✕</button>
-  <div class="img-ph pm-img"><span class="phi">🖼️</span><span>프로그램 이미지</span></div>
+  <div class="pm-img"><img src="assets/images/programs/Gemini_Generated_Image_nzjrrxnzjrrxnzjr.png" alt="AI 자서전 만들기" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" /></div>
   <div class="pm-tag">문화형 × 창작형 · 공공기관</div>
   <h2>AI를 활용하여 자서전 만들기</h2>
   <p class="modal-sub">나의 삶을 AI와 함께 기록하고 책으로 남기는 경험</p>
   <div class="pm-details">
     <div class="pm-detail"><div class="dl">대상</div><div class="dv">성인 / 공공기관</div></div>
     <div class="pm-detail"><div class="dl">비용</div><div class="dv">문의</div></div>
+    <div class="pm-detail" style="grid-column:1/-1;"><div class="dl">목적</div><div class="dv">삶의 기록 · 자서전 제작 · 나다움 탐구</div></div>
   </div>
   <ul class="pm-features">
     <li>AI 도구를 활용한 자서전 집필 과정</li>
@@ -1151,6 +1199,15 @@
 </div></div>
 
 <script>
+  /* Audio toggle */
+  function toggleAudio(){
+    const a=document.getElementById('resultAudio');
+    const btn=document.getElementById('playBtn');
+    if(a.paused){a.play();btn.textContent='⏸ 일시정지';}
+    else{a.pause();btn.textContent='▶ 재생하기';}
+    a.onended=()=>{btn.textContent='▶ 재생하기';};
+  }
+
   /* Modal */
   function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
   function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
@@ -1203,9 +1260,11 @@
       school: f.school.value,
       name: f.name.value,
       phone: f.phone.value,
+      email: f.email.value||'미정',
+      target: f.target.value||'미정',
       students: f.students.value||'미정',
       program: f.program.value||'미정',
-      purpose: f.purpose.value||'',
+      purpose: f.purpose.value||'미정',
       message: f.message.value||'',
       _subject: `[IDenTeach 교육문의] ${f.school.value} ${f.name.value}`
     };
@@ -1242,6 +1301,92 @@
     navigator.clipboard.writeText(document.getElementById('propMsg').textContent)
       .then(()=>alert('복사 완료! 카카오톡에 붙여넣기 해주세요 😊'));
   }
+
+  /* ═══ HERO INTRO ANIMATION ═══ */
+  (function(){
+    const hero=document.querySelector('.hero');
+    const nucleus=document.getElementById('heroNucleus');
+    const particles=document.getElementById('heroParticles');
+    const geoShapes=[
+      document.querySelector('.geo-s1'),
+      document.querySelector('.geo-s2'),
+      document.querySelector('.geo-s3'),
+      document.querySelector('.geo-s4')
+    ];
+
+    // 도형 각각의 중심에서 최종 위치까지 오프셋 계산
+    function calcOffset(el){
+      const hR=hero.getBoundingClientRect();
+      const eR=el.getBoundingClientRect();
+      return {
+        x:(hR.left+hR.width/2)-(eR.left+eR.width/2),
+        y:(hR.top+hR.height/2)-(eR.top+eR.height/2)
+      };
+    }
+
+    // 파티클 폭발 생성
+    function createParticles(){
+      const colors=['#691afa','#c68dff','#ff6b9d','#00d4aa','#ffd93d','#6a00ff','#8b3fff','#ff4d8d','#00b894'];
+      const types=['circle','hex','tri','diamond'];
+      const hR=hero.getBoundingClientRect();
+      const cx=hR.width/2, cy=hR.height/2;
+      const count=18;
+      for(let i=0;i<count;i++){
+        const angle=(i/count)*Math.PI*2;
+        const dist=130+Math.random()*200;
+        const size=Math.round(14+Math.random()*36);
+        const color=colors[i%colors.length];
+        const type=types[i%types.length];
+        const delay=(Math.random()*0.3).toFixed(2);
+        const bx=Math.round(Math.cos(angle)*dist);
+        const by=Math.round(Math.sin(angle)*dist);
+        const el=document.createElement('div');
+        el.style.cssText=`position:absolute;left:${cx}px;top:${cy}px;pointer-events:none;`;
+        el.style.setProperty('--bx',bx+'px');
+        el.style.setProperty('--by',by+'px');
+        el.style.animation=`burstOut 1.1s ease-out ${delay}s forwards`;
+        const s=size;
+        let svg='';
+        if(type==='circle'){
+          svg=`<svg width="${s}" height="${s}"><circle cx="${s/2}" cy="${s/2}" r="${s/2-1}" fill="${color}" opacity="0.8"/></svg>`;
+        }else if(type==='hex'){
+          const pts=Array.from({length:6},(_,j)=>{const a=j*60*Math.PI/180-Math.PI/6;return `${s/2+(s/2-1)*Math.cos(a)},${s/2+(s/2-1)*Math.sin(a)}`;}).join(' ');
+          svg=`<svg width="${s}" height="${s}"><polygon points="${pts}" fill="${color}" opacity="0.8"/></svg>`;
+        }else if(type==='tri'){
+          svg=`<svg width="${s}" height="${s}"><polygon points="${s/2},2 ${s-2},${s-2} 2,${s-2}" fill="${color}" opacity="0.8"/></svg>`;
+        }else{
+          svg=`<svg width="${s}" height="${s}"><polygon points="${s/2},2 ${s-2},${s/2} ${s/2},${s-2} 2,${s/2}" fill="${color}" opacity="0.8"/></svg>`;
+        }
+        el.innerHTML=svg;
+        particles.appendChild(el);
+      }
+      setTimeout(()=>{ particles.innerHTML=''; },2200);
+    }
+
+    // Phase 1: 설계도 선 그리기 (CSS 0~1.4s)
+    // Phase 2: 핵(nucleus) 등장 + 파티클 폭발 (1.2s)
+    setTimeout(()=>{
+      nucleus.classList.add('active');
+      createParticles();
+    },1200);
+
+    // Phase 3: 도형들이 중심에서 날아 나옴 (1.6s ~)
+    setTimeout(()=>{
+      geoShapes.forEach((shape,i)=>{
+        if(!shape) return;
+        const off=calcOffset(shape);
+        shape.style.setProperty('--fly-x',off.x+'px');
+        shape.style.setProperty('--fly-y',off.y+'px');
+        setTimeout(()=>{
+          shape.classList.add('geo-flying');
+          shape.addEventListener('animationend',()=>{
+            shape.classList.remove('geo-flying');
+            shape.classList.add('geo-floating'); // float 루프 시작
+          },{once:true});
+        },i*140);
+      });
+    },1600);
+  })();
 
   /* Scroll animation */
   const obs=new IntersectionObserver(entries=>{

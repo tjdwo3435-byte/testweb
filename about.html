@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IDenTeach - 회사소개</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Nanum+Pen+Script&family=Nanum+Brush+Script&display=swap" rel="stylesheet" />
   <style>
     :root {
       --main:#691afa; --sub:#c68dff; --accent:#6a00ff;
@@ -70,14 +70,34 @@
     /* ── CEO 소개 ── */
     .ceo-section{background:var(--white);}
     .ceo-wrap{display:grid;grid-template-columns:340px 1fr;gap:64px;align-items:center;}
-    .ceo-photo{border-radius:28px;overflow:hidden;box-shadow:0 24px 64px rgba(105,26,250,0.15);position:relative;}
-    .ceo-photo-img{height:420px;overflow:hidden;position:relative;}
+    .ceo-photo{
+      position:relative;
+      border-radius:28px;overflow:hidden;
+      box-shadow:0 24px 64px rgba(105,26,250,0.2);
+    }
+    /* 사각형 배경 틀 효과 */
+    .ceo-photo::before{
+      content:'';position:absolute;inset:-8px;
+      border:2px solid rgba(105,26,250,0.25);
+      border-radius:32px;z-index:0;
+      background:linear-gradient(135deg,rgba(105,26,250,0.06),rgba(198,141,255,0.08));
+    }
+    .ceo-photo::after{
+      content:'';position:absolute;inset:-16px;
+      border:1px solid rgba(105,26,250,0.12);
+      border-radius:36px;z-index:0;
+    }
+    .ceo-photo-img{height:420px;overflow:hidden;position:relative;z-index:1;border-radius:24px;}
     .ceo-photo-img img{width:100%;height:160%;object-fit:cover;object-position:center top;position:absolute;top:0;left:0;}
     .ceo-photo-badge{
-      position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+      position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:2;
       background:var(--main);color:#fff;font-size:12px;font-weight:700;
       padding:8px 20px;border-radius:20px;white-space:nowrap;
       box-shadow:0 4px 16px rgba(105,26,250,0.4);
+    }
+    .ceo-quote-handwriting{
+      font-family:'Nanum Brush Script',cursive;
+      font-size:30pt;color:var(--text);line-height:1.7;
     }
     .ceo-content .name-wrap{display:flex;align-items:baseline;gap:12px;margin-bottom:24px;}
     .ceo-content .name{font-size:28px;font-weight:900;letter-spacing:-0.5px;}
@@ -87,6 +107,7 @@
       border-left:4px solid var(--main);
     }
     .ceo-quote p{font-size:16px;color:var(--text);line-height:1.85;font-weight:500;}
+    .ceo-quote p.ceo-quote-handwriting{font-size:30pt;line-height:1.7;font-weight:400;}
     .ceo-desc p{font-size:15px;color:var(--gray);line-height:1.85;margin-bottom:16px;}
     .ceo-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
     .ceo-tag{background:rgba(105,26,250,0.08);color:var(--main);font-size:12px;font-weight:700;padding:5px 14px;border-radius:12px;}
@@ -261,9 +282,9 @@
           <span class="title">IDenTeach 대표 · 한양대학원 조직심리 및 HRD 전공</span>
         </div>
         <div class="ceo-quote">
-          <p>
-            "듣고 쓰는 것보다 경험할 수 있는 환경을 설계하여<br />
-            스스로 만들어가는 나다움만이 유일한 목적입니다."
+          <p class="ceo-quote-handwriting">
+            "결국 나답게 성장하기 위해서는<br />
+            많은 경험을 해봐야 합니다"
           </p>
         </div>
         <div class="ceo-desc">
@@ -284,6 +305,7 @@
           <span class="ceo-tag">조직심리 및 HRD</span>
           <span class="ceo-tag">경험 교육 설계</span>
           <span class="ceo-tag">정체성 탐구 교육</span>
+          <span class="ceo-tag">레크리에이션 학과 수석 입학</span>
         </div>
       </div>
     </div>
@@ -308,17 +330,17 @@
       <div class="essence-step">
         <div class="essence-num">모방</div>
         <h3>모방</h3>
-        <p>먼저 따라해보고 경험하는 것부터 시작합니다. 모방은 창조의 시작입니다.</p>
+        <p>먼저 따라해보고 경험하는 것부터 시작합니다. 모방은 모든 배움의 출발점입니다.</p>
+      </div>
+      <div class="essence-step">
+        <div class="essence-num">경쟁</div>
+        <h3>경쟁</h3>
+        <p>서로 자극하고 비교하며 더 잘하고 싶다는 동기를 만듭니다. 건강한 경쟁이 성장을 이끕니다.</p>
       </div>
       <div class="essence-step">
         <div class="essence-num">도전</div>
         <h3>도전</h3>
         <p>익숙해진 것을 넘어 새로운 것을 시도하는 환경을 만듭니다. 실패해도 괜찮은 구조.</p>
-      </div>
-      <div class="essence-step">
-        <div class="essence-num">창조</div>
-        <h3>창조</h3>
-        <p>자신만의 것을 만들어냅니다. 결과물이 남는 교육의 핵심이 바로 이 단계입니다.</p>
       </div>
       <div class="essence-step">
         <div class="essence-num">인정</div>
@@ -328,8 +350,8 @@
     </div>
     <div class="essence-desc">
       <p>
-        IDenTeach의 모든 프로그램은 이 4단계가 자연스럽게 흐르도록 설계됩니다.<br />
-        <strong>모방에서 시작해 인정으로 끝나는 경험</strong> — 그것이 나다움을 찾는 여정입니다.
+        IDenTeach의 모든 프로그램은 이 4가지 교육 환경이 자연스럽게 흐르도록 설계됩니다.<br />
+        <strong>모방 → 경쟁 → 도전 → 인정</strong> — 그것이 나다움을 찾는 여정입니다.
       </p>
     </div>
   </div>
@@ -344,7 +366,10 @@
     <div class="planner-intro">
       <p class="sec-label">아이덴플레너</p>
       <h2 class="sec-title">다양한 분야의 전문가들이<br />함께 프로그램을 만듭니다</h2>
-      <p class="sec-sub">아이덴플레너(IDen Planner)는 IDenTeach와 함께<br />새로운 경험 교육 콘텐츠를 기획하는 전문가 그룹입니다.</p>
+      <div style="display:inline-block;background:linear-gradient(135deg,var(--main),var(--accent));border-radius:16px;padding:14px 32px;margin-bottom:24px;box-shadow:0 8px 28px rgba(105,26,250,0.3);">
+        <span style="color:#fff;font-size:20px;font-weight:900;letter-spacing:0.5px;">✦ 아이덴플레너 (IDen Planner)</span>
+      </div>
+      <p class="sec-sub">IDenTeach와 함께 새로운 경험 교육 콘텐츠를 기획하는 전문가 그룹<br />각 분야의 전문가들이 모여 대상에게 최적화된 프로그램을 설계합니다.</p>
     </div>
     <div class="planner-grid">
       <div class="planner-card">
@@ -361,6 +386,11 @@
         <div class="planner-icon">🎨</div>
         <h3>분야 전문가</h3>
         <p>문화·예술·AI·심리 등 다양한 분야의 전문가가 프로그램 기획에 참여합니다.</p>
+      </div>
+      <div class="planner-card" style="border:2px solid rgba(105,26,250,0.2);background:linear-gradient(135deg,#f3ecff,#ede4ff);">
+        <div class="planner-icon">🤝</div>
+        <h3>협력업체</h3>
+        <p>그레이프스 (Grape-s) — AI 음원 저작권 안전 솔루션 ODO 플랫폼을 통해 법적 리스크 없는 AI 창작 경험을 제공합니다.</p>
       </div>
     </div>
     <div class="planner-range">
